@@ -1,26 +1,53 @@
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Person> people = new ArrayList<>();
-        Employee employee1 = new Employee("John", "Lennon", "Employee", 27045.78);
-        Employee employee2 = new Employee("George", "Harrison", "Employee", 50000.0);
-        Student student1 = new Student("Ringo", "Starr", 2);
-        Student student2 = new Student("Paul", "McCartney", 3.67);
+        EmployeeDataAccessObject employeeDAO = new EmployeeDataAccessObject();
 
-        people.add(student1);
-        people.add(employee1);
-        people.add(student2);
-        people.add(employee2);
 
-        Collections.sort(people);
-        printData(people);
-    }
-    public static void printData(Iterable<Person> people){
-        for(Person person : people){
-            System.out.println(person.toString() + " earns " + person.getPaymentAmount() + " tenge");
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Input NAME, POSITION, DEPARTMENT, SALARY by spaces:");
+        String input1 = scan.nextLine();
+
+        String[] dbArguments = input1.split(" ");
+
+
+        employeeDAO.addEmployee(dbArguments[0], dbArguments[1], dbArguments[2], Integer.parseInt(dbArguments[3]));
+
+
+        employeeDAO.addEmployee("Rauan Marlen", "Software Engineer", "IT", 80000);
+        employeeDAO.addEmployee("Will Smith", "Manager", "HR", 90000);
+        employeeDAO.addEmployee("Michael Jackson", "Analyst", "Finance", 75000);
+        employeeDAO.addEmployee("Jon Jones", "Designer", "Marketing", 85000);
+
+
+        List<Employee> employeesList = employeeDAO.getEmployees();
+        System.out.println("All employees: " + employeesList);
+
+
+        employeeDAO.updateEmployee(1, "Rauan Marlen", "Senior Software Engineer", "IT", 95000);
+
+
+        employeesList = employeeDAO.getEmployees();
+        System.out.println("Updated employees: " + employeesList);
+
+        System.out.println("EMPLOYEE SALARY for 0 el: " + employeesList.get(0).getSalary() + " NAME: " + employeesList.get(0).getName());
+
+
+        for (int i = 0; i < employeesList.size(); i++) {
+            if (Objects.equals(employeesList.get(i).getDepartment(), "HR")) {
+                System.out.println("Deleted employee: " + employeesList.get(i) + ". YES THIS EMPLOYEE WAS FROM HR!!! :) ");
+                employeeDAO.deleteEmployee(employeesList.get(i).getId());
+            }
         }
+
+
+        employeesList = employeeDAO.getEmployees();
+        System.out.println("Final employees: " + employeesList);
+
+
+        employeeDAO.closeConnection();
     }
 }

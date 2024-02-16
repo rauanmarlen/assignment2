@@ -1,11 +1,26 @@
-public class Employee extends Person{
+public class Employee {
+    private int id;
     private String name;
-    private String surname;
     private String position;
-    private double salary;
+    private String department;
+    private int salary;
+
+
+    public Employee(int id, String name, String position, String department, int salary) {
+        this.id = id;
+        this.name = name;
+        this.position = position;
+        this.department = department;
+        this.salary = salary;
+    }
+
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -16,14 +31,6 @@ public class Employee extends Person{
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getPosition() {
         return position;
     }
@@ -32,35 +39,31 @@ public class Employee extends Person{
         this.position = position;
     }
 
-    public double getSalary() {
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public int getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 
-    public Employee() {
-        this.id = generateId();
-    }
-
-    public Employee(String name, String surname, String position, double salary) {
-        this.name = name;
-        this.surname = surname;
-        this.position = position;
-        this.salary = salary;
-    }
-
-    private static int generateId() {
-        return nextId++;
-    }
 
     @Override
-    public String toString(){
-        return "Employee: "+id+"."+name+" "+surname;
-    }
-    @Override
-    public double getPaymentAmount() {
-        return salary;
+    public String toString() {
+        return "Employee {" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", position='" + getPosition() + '\'' +
+                ", department='" + getDepartment() + '\'' +
+                ", salary=" + getSalary() +
+                '}';
     }
 }
