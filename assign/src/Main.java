@@ -1,53 +1,101 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+class Task {
+    private String description;
+    private boolean isCompleted;
+
+    public Task(String description) {
+        this.description = description;
+        this.isCompleted = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void markAsCompleted() {
+        isCompleted = true;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + (isCompleted ? "X" : " ") + "] " + description;
+    }
+}
+
+public class ToDoListApp {
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        EmployeeDataAccessObject employeeDAO = new EmployeeDataAccessObject();
+        showMenu();
+    }
 
+    private static void showMenu() {
+        int choice;
+        do {
+            System.out.println("\n--- To-Do List ---");
+            System.out.println("1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Mark Task as Completed");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Input NAME, POSITION, DEPARTMENT, SALARY by spaces:");
-        String input1 = scan.nextLine();
+            switch (choice) {
+                case 1:
+                    addTask();
+                    break;
+                case 2:
+                    viewTasks();
+                    break;
+                case 3:
+                    markAsCompleted();
+                    break;
+                case 4:
+                    System.out.println("Exiting the program. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 4);
+    }
 
-        String[] dbArguments = input1.split(" ");
+    private static void addTask() {
+        System.out.print("Enter task description: ");
+        String description = scanner.nextLine();
+        tasks.add(new Task(description));
+        System.out.println("Task added successfully!");
+    }
 
-
-        employeeDAO.addEmployee(dbArguments[0], dbArguments[1], dbArguments[2], Integer.parseInt(dbArguments[3]));
-
-
-        employeeDAO.addEmployee("Rauan Marlen", "Software Engineer", "IT", 80000);
-        employeeDAO.addEmployee("Will Smith", "Manager", "HR", 90000);
-        employeeDAO.addEmployee("Michael Jackson", "Analyst", "Finance", 75000);
-        employeeDAO.addEmployee("Jon Jones", "Designer", "Marketing", 85000);
-
-
-        List<Employee> employeesList = employeeDAO.getEmployees();
-        System.out.println("All employees: " + employeesList);
-
-
-        employeeDAO.updateEmployee(1, "Rauan Marlen", "Senior Software Engineer", "IT", 95000);
-
-
-        employeesList = employeeDAO.getEmployees();
-        System.out.println("Updated employees: " + employeesList);
-
-        System.out.println("EMPLOYEE SALARY for 0 el: " + employeesList.get(0).getSalary() + " NAME: " + employeesList.get(0).getName());
-
-
-        for (int i = 0; i < employeesList.size(); i++) {
-            if (Objects.equals(employeesList.get(i).getDepartment(), "HR")) {
-                System.out.println("Deleted employee: " + employeesList.get(i) + ". YES THIS EMPLOYEE WAS FROM HR!!! :) ");
-                employeeDAO.deleteEmployee(employeesList.get(i).getId());
+    private static void viewTasks() {
+        System.out.println("\n--- Tasks ---");
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
             }
         }
+    }
 
-
-        employeesList = employeeDAO.getEmployees();
-        System.out.println("Final employees: " + employeesList);
-
-
-        employeeDAO.closeConnection();
+    private static void markAsCompleted() {
+        viewTasks();
+        if (!tasks.isEmpty()) {
+            System.out.print("Enter the task number to mark as completed: ");
+            int taskNumber = scanner.nextInt();
+            if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+                tasks.get(taskNumber - 1).markAsCompleted();
+                System.out.println("Task marked as completed!");
+            } else {
+                System.out.println("Invalid task number. Please try again.");
+            }
+        }
     }
 }
